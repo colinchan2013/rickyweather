@@ -83,6 +83,7 @@ public class ChooseAreaActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (currentLevel == LEVEL_PROVINCE) {
 					selectedProvince = provinceList.get(arg2);
+					queryCities();
 				} else if (currentLevel == LEVEL_CITY) {
 					selectedCity = cityList.get(arg2);
 					queryCounties();
@@ -231,7 +232,12 @@ public class ChooseAreaActivity extends Activity {
 	 */
 	private void showProgressDialog() {
 		// TODO Auto-generated method stub
-
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage("正在加载...");
+			progressDialog.setCanceledOnTouchOutside(false);
+		}
+		progressDialog.show();
 	}
 
 	/**
@@ -239,6 +245,24 @@ public class ChooseAreaActivity extends Activity {
 	 */
 	private void closeProgressDialog() {
 		// TODO Auto-generated method stub
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 
 	}
+
+	/**
+	 * 捕获back键，根据当前的级别来判断，此时应该返回市列表、省列表、还是直接退出。
+	 */
+	@Override
+	public void onBackPressed() {
+		if (currentLevel == LEVEL_COUNTY) {
+			queryCities();
+		} else if (currentLevel == LEVEL_CITY) {
+			queryProvinces();
+		} else {
+			finish();
+		}
+	}
+
 }
